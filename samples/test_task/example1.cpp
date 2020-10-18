@@ -197,6 +197,7 @@ int main(int argc, char** argv)
     std::cout << buf1_data[0];
 
     clReleaseMemObject(buffer1);
+    clReleaseMemObject(buffer2);
     clReleaseKernel(kernel);
     clReleaseProgram(prog);
     clReleaseCommandQueue(main_queue);
