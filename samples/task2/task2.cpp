@@ -26,7 +26,7 @@ int daxpy(size_t n, double a, double* x, size_t incx, double* y, size_t incy)
 int saxpy_omp(size_t n, float a, float* x, size_t incx, float* y, size_t incy)
 {
     #pragma omp parallel for
-    for (size_t i = 0; i < n; ++i)
+    for (ptrdiff_t i = 0; i < n; ++i)
         y[i * incy] += x[i * incx] * a;
     return 0;
 }
@@ -34,7 +34,7 @@ int saxpy_omp(size_t n, float a, float* x, size_t incx, float* y, size_t incy)
 int daxpy_omp(size_t n, double a, double* x, size_t incx, double* y, size_t incy)
 {
     #pragma omp parallel for
-    for (size_t i = 0; i < n; ++i)
+    for (ptrdiff_t i = 0; i < n; ++i)
         y[i * incy] += x[i * incx] * a;
     return 0;
 }
@@ -64,11 +64,11 @@ int saxpy_device(size_t n, float a, float* x, size_t incx, float* y, size_t incy
 
     cl_event buf_e[2];
 
-    cl_mem buff_y = clCreateBuffer(main_ctx, CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR, n * incy * sizeof(float), y, &ret);
+    cl_mem buff_y = clCreateBuffer(main_ctx, CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR, n * incy * sizeof(float), y, &ret);
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateBuffer: " << ret << std::endl, 1;
 
-    cl_mem buff_x = clCreateBuffer(main_ctx, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR, n * incx * sizeof(float), x, &ret);
+    cl_mem buff_x = clCreateBuffer(main_ctx, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, n * incx * sizeof(float), x, &ret);
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateBuffer: " << ret << std::endl, 1;
 
@@ -139,11 +139,11 @@ int daxpy_device(size_t n, double a, double* x, size_t incx, double* y, size_t i
 
     cl_event buf_e[2];
 
-    cl_mem buff_y = clCreateBuffer(main_ctx, CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR, n * incy * sizeof(double), y, &ret);
+    cl_mem buff_y = clCreateBuffer(main_ctx, CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR, n * incy * sizeof(double), y, &ret);
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateBuffer: " << ret << std::endl, 1;
 
-    cl_mem buff_x = clCreateBuffer(main_ctx, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR, n * incx * sizeof(double), x, &ret);
+    cl_mem buff_x = clCreateBuffer(main_ctx, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, n * incx * sizeof(double), x, &ret);
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateBuffer: " << ret << std::endl, 1;
 
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
     cl_device_id gpu_device = get_any_gpu_device();
     cl_device_id cpu_device = get_any_cpu_device();
 
-    size_t n = 6400000;
+    size_t n = 64000000;
     size_t inc_x = 4;
     size_t inc_y = 3;
     size_t group_size = 256;
