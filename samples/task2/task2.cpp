@@ -25,16 +25,18 @@ int daxpy(size_t n, double a, double* x, size_t incx, double* y, size_t incy)
 
 int saxpy_omp(size_t n, float a, float* x, size_t incx, float* y, size_t incy)
 {
+    ptrdiff_t signed_n = n;
     #pragma omp parallel for
-    for (ptrdiff_t i = 0; i < n; ++i)
+    for (ptrdiff_t i = 0; i < signed_n; ++i)
         y[i * incy] += x[i * incx] * a;
     return 0;
 }
 
 int daxpy_omp(size_t n, double a, double* x, size_t incx, double* y, size_t incy)
 {
+    ptrdiff_t signed_n = n;
     #pragma omp parallel for
-    for (ptrdiff_t i = 0; i < n; ++i)
+    for (ptrdiff_t i = 0; i < signed_n; ++i)
         y[i * incy] += x[i * incx] * a;
     return 0;
 }
@@ -62,7 +64,7 @@ int saxpy_device(size_t n, float a, float* x, size_t incx, float* y, size_t incy
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateKernel: " << ret << std::endl, 1;
 
-    cl_event buf_e[2];
+    cl_event buf_e[2] {0};
 
     cl_mem buff_y = clCreateBuffer(main_ctx, CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR, n * incy * sizeof(float), y, &ret);
     if (ret != CL_SUCCESS)
@@ -137,7 +139,7 @@ int daxpy_device(size_t n, double a, double* x, size_t incx, double* y, size_t i
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateKernel: " << ret << std::endl, 1;
 
-    cl_event buf_e[2];
+    cl_event buf_e[2] {0};
 
     cl_mem buff_y = clCreateBuffer(main_ctx, CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR, n * incy * sizeof(double), y, &ret);
     if (ret != CL_SUCCESS)
