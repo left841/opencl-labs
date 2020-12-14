@@ -44,18 +44,20 @@ cl_device_id get_any_cpu_device()
     for (cl_platform_id i: plfrm_ids)
     {
         cl_uint device_count = 0;
-        if (clGetDeviceIDs(i, CL_DEVICE_TYPE_CPU, 0, nullptr, &device_count) != CL_SUCCESS)
+        if (clGetDeviceIDs(i, CL_DEVICE_TYPE_ALL, 0, nullptr, &device_count) != CL_SUCCESS)
             return nullptr;
 
         std::vector<cl_device_id> device_vec(device_count);
 
-        if (clGetDeviceIDs(i, CL_DEVICE_TYPE_CPU, device_count, device_vec.data(), nullptr) != CL_SUCCESS)
+        if (clGetDeviceIDs(i, CL_DEVICE_TYPE_ALL, device_count, device_vec.data(), nullptr) != CL_SUCCESS)
             return nullptr;
 
-        if (device_vec.size() > 0)
+        for (cl_device_id j: device_vec)
         {
-            cl_device_id id = device_vec.front();
-            return id;
+            cl_device_type t;
+            clGetDeviceInfo(j, CL_DEVICE_TYPE, sizeof(cl_device_type), &t, nullptr);
+            if (t == CL_DEVICE_TYPE_CPU)
+                return j;
         }
     }
     return nullptr;

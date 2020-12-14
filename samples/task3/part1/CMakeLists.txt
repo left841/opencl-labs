@@ -12,4 +12,4 @@ add_executable(${sample_name} ${src} ${headers})
 target_include_directories(${sample_name} PUBLIC ${headers} ${common_headers} ${OpenCL_INCLUDE_DIRS})
 
 target_compile_options(${sample_name} PRIVATE ${OpenMP_CXX_FLAGS})
-target_link_libraries(${sample_name} ${common_libs} ${OpenCL_LIBRARY})
+target_link_libraries(${sample_name} common_libs ${OpenCL_LIBRARY})

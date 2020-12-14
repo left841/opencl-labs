@@ -98,7 +98,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    cl_command_queue main_queue = clCreateCommandQueueWithProperties(main_ctx, cur_device, nullptr, &ret);
+    cl_command_queue main_queue = clCreateCommandQueue(main_ctx, cur_device, 0, &ret);
     if (ret != CL_SUCCESS)
     {
         std::cout << "Error in clCreateCommandQueue: " << ret << std::endl;

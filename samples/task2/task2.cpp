@@ -49,7 +49,7 @@ int saxpy_device(size_t n, float a, float* x, size_t incx, float* y, size_t incy
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateContext: " << ret << std::endl, 1;
 
-    cl_command_queue main_queue = clCreateCommandQueueWithProperties(main_ctx, device, nullptr, &ret);
+    cl_command_queue main_queue = clCreateCommandQueue(main_ctx, device, 0, &ret);
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateCommandQueueWithProperties: " << ret << std::endl, 1;
 
@@ -124,7 +124,7 @@ int daxpy_device(size_t n, double a, double* x, size_t incx, double* y, size_t i
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateContext: " << ret << std::endl, 1;
 
-    cl_command_queue main_queue = clCreateCommandQueueWithProperties(main_ctx, device, nullptr, &ret);
+    cl_command_queue main_queue = clCreateCommandQueue(main_ctx, device, 0, &ret);
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateCommandQueueWithProperties: " << ret << std::endl, 1;
 

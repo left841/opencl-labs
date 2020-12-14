@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateContext: " << ret << std::endl, 1;
 
-    cl_command_queue main_queue = clCreateCommandQueueWithProperties(main_ctx, cur_device, nullptr, &ret);
+    cl_command_queue main_queue = clCreateCommandQueue(main_ctx, cur_device, 0, &ret);
     if (ret != CL_SUCCESS)
         return std::cerr << "Error in clCreateCommandQueueWithProperties: " << ret << std::endl, 1;
 
